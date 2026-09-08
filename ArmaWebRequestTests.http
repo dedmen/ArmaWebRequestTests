@@ -1,0 +1,6 @@
+@ArmaWebRequestTests_HostAddress = http://localhost:5181
+
+GET {{ArmaWebRequestTests_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
