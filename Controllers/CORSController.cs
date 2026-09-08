@@ -68,5 +68,14 @@ namespace ArmaWebRequestTests.Controllers
             return Get();
         }
 
+
+        [EnableCors("AllowWildcard_PUT")]
+        [HttpGet(Name = "ArmaPUT")]
+        [Route("ArmaPUT")]
+        public IEnumerable<WeatherForecast> GetArmaPUT()
+        {
+            return Get();
+        }
+
     }
 }

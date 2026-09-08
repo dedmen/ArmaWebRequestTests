@@ -1,3 +1,5 @@
+#include "macros.hpp"
+
 private _handle = webRequest #{
   "type": "http",
   //"origin": "test",
@@ -7,4 +9,6 @@ private _handle = webRequest #{
 private _result = waitUntil _handle;
 _result params ["_request", "_result"];
 
-if (_result get "httpCode" != 200) throw format["Unexpected HTTP code: %1", _result get "httpCode"];
+EXPECT_SUCCESS_CODE(200);
+
+_result

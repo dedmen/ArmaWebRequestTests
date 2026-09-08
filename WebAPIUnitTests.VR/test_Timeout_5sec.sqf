@@ -2,8 +2,7 @@
 
 private _handle = webRequest #{
   "type": "http",
-  "origin": "test",
-  "url": "https://localhost:7082/CORSTest/ArmaCors"
+  "url": "https://localhost:7082/TestCase/5SecDelay" // GET is not allowed
 };
 
 private _result = waitUntil _handle;

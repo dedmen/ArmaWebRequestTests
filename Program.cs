@@ -17,6 +17,12 @@ namespace ArmaWebRequestTests
                         policy.WithOrigins("arma://test").AllowAnyMethod();
                     });
 
+                options.AddPolicy("AllowArmaTest_PUT",
+                    policy =>
+                    {
+                        policy.WithOrigins("arma://test").WithMethods("PUT");
+                    });
+
                 options.AddPolicy("AllowArmaNull",
                     policy =>
                     {
@@ -27,6 +33,12 @@ namespace ArmaWebRequestTests
                     policy =>
                     {
                         policy.AllowAnyOrigin().AllowAnyMethod();
+                    });
+
+                options.AddPolicy("AllowWildcard_PUT",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin().WithMethods("PUT");
                     });
 
                 options.AddPolicy("AllowNone",
@@ -40,6 +52,8 @@ namespace ArmaWebRequestTests
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddHostedService<mDNSHostedService>();
 
             var app = builder.Build();
 
