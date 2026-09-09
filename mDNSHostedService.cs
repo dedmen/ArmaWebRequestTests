@@ -47,6 +47,8 @@ namespace ArmaWebRequestTests
 
             var serviceProfile = new ServiceProfile("ASPNetSample", "_arma3web._tcp", 7082, addresses);
 
+            serviceProfile.HostName = new DomainName("ASPNetSample_a3web.local");
+
             // 3. Inject explicit Key/Value pairs into the TXT record map if needed
             serviceProfile.Resources.Add(new TXTRecord
             {
