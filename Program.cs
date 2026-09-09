@@ -11,9 +11,14 @@ namespace ArmaWebRequestTests
             {
                 options.ConfigureEndpointDefaults(listenOptions =>
                 {
-                    // Allow HTTP/1.1 (GET request) and HTTP/2 (CONNECT request)
-                    listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
+                    if (listenOptions.IPEndPoint.Port == 7082)
+                    {
+                        // Allow HTTP/1.1 (GET request) and HTTP/2 (CONNECT request)
+                        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2AndHttp3; // https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/quic/quic-overview#platform-dependencies
+                        listenOptions.DisableAltSvcHeader = false;
+                    }
                 });
+
             });
 
 
