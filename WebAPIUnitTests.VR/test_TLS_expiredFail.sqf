@@ -3,7 +3,8 @@
 private _handle = webRequest #{
   "type": "http",
   "origin": "test",
-  "url": "https://expired.badssl.com/"
+  "url": "https://expired.badssl.com/",
+  "debug": true
 };
 
 private _result = waitUntil _handle;

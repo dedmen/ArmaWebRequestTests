@@ -1,6 +1,10 @@
 private _tests = addonFiles ["$mission", ".sqf"] select {_x select [0, 5] == "test_"};
 
-#define WITH_TIME
+//#define WITH_TIME
+
+
+// Clear preflight cache
+webRequest #{"type": "flush"};
 
 GStartOffset = time;
 _spawns = _tests apply {

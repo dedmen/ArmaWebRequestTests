@@ -2,7 +2,8 @@
 
 private _handle = webRequest #{
   "type": "http",
-  "url": "https://localhost:7082/CORSTest/ArmaPUT" // GET is not allowed
+  "url": "https://localhost:7082/CORSTest/ArmaPUT", // GET is not allowed
+  "debug": true
 };
 
 private _result = waitUntil _handle;

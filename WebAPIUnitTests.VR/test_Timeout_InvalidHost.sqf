@@ -2,7 +2,8 @@
 
 private _handle = webRequest #{
   "type": "http",
-  "url": "https://10.0.255.255" // GET is not allowed
+  "url": "https://10.0.255.255", // GET is not allowed
+  "debug": true
 };
 
 private _result = waitUntil _handle;

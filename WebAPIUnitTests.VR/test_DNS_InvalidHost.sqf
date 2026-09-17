@@ -2,7 +2,8 @@
 
 private _handle = webRequest #{
   "type": "http",
-  "url": "https://doesnotexist.cim" // GET is not allowed
+  "url": "https://doesnotexist.cim", // GET is not allowed
+  "debug": true
 };
 
 private _result = waitUntil _handle;

@@ -3,7 +3,8 @@
 private _handle = webRequest #{
   "type": "http",
   //"origin": "test",
-  "url": "https://localhost:7082/CORSTest/ArmaNull"
+  "url": "https://localhost:7082/CORSTest/ArmaNull",
+  "debug": true
 };
 
 private _result = waitUntil _handle;

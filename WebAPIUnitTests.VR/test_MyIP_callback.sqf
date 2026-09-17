@@ -7,7 +7,8 @@ private _handle = webRequest #{
   "origin": "test",
   "url": "https://myip.wtf/text",
   "onCompleted": { _thisArgs append _this; },
-  "callbackContext": _resultArr
+  "callbackContext": _resultArr,
+  "debug": true
 };
 
 private _result = waitUntil _handle;

@@ -2,7 +2,8 @@
 
 private _handle = webRequest #{
   "type": "http",
-  "url": "https://localhost:7082/CORSTest/NoCORS" // OPTIONS returns 405
+  "url": "https://localhost:7082/CORSTest/NoCORS", // OPTIONS returns 405
+  "debug": true
 };
 
 private _result = waitUntil _handle;

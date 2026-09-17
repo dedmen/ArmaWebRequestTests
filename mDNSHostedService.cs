@@ -26,24 +26,24 @@ namespace ArmaWebRequestTests
 
             List<IPAddress> addresses = new();
 
-            //foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
-            //{
-            //    if (ni.OperationalStatus == OperationalStatus.Up &&
-            //        ni.NetworkInterfaceType != NetworkInterfaceType.Loopback)
-            //    {
-            //        var props = ni.GetIPProperties();
-            //        foreach (var addr in props.UnicastAddresses)
-            //        {
-            //            if (addr.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-            //            {
-            //                addresses.Add(addr.Address);
-            //            }
-            //        }
-            //    }
-            //}
+            foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (ni.OperationalStatus == OperationalStatus.Up &&
+                    ni.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                {
+                    var props = ni.GetIPProperties();
+                    foreach (var addr in props.UnicastAddresses)
+                    {
+                        if (addr.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            addresses.Add(addr.Address);
+                        }
+                    }
+                }
+            }
 
 
-            addresses.Add(IPAddress.Loopback);
+            //addresses.Add(IPAddress.Loopback);
 
             var serviceProfile = new ServiceProfile("ASPNetSample", "_arma3web._tcp", 7082, addresses);
 
@@ -56,11 +56,29 @@ namespace ArmaWebRequestTests
                 Strings = { "version=1.0", "status=running", "path=/api/v1" }
             });
 
+            // Multiple SRV records (Technically different hostnames should work with mDNS, but this library or Windows doesn't let me.
+            var sec = (SRVRecord)serviceProfile.Resources.First().Clone();
+            sec.Port = 1338;
+            serviceProfile.Resources.Add(sec);
+
+            var serviceProfile2 = new ServiceProfile("IAmAServiceName", "_arma3web._tcp", 1337, [IPAddress.Loopback]);
+
+            serviceProfile2.HostName = new DomainName("The service decides its hostname");
+
+            // 3. Inject explicit Key/Value pairs into the TXT record map if needed
+            serviceProfile2.Resources.Add(new TXTRecord
+            {
+                Name = serviceProfile2.FullyQualifiedName,
+                Strings = { "OhSoMany=Things" }
+            });
+
+
 
             // 6. Register the completed profile and spin up the engine
             var serviceDiscovery = new ServiceDiscovery(mdns);
             serviceDiscovery.Advertise(serviceProfile);
- 
+            serviceDiscovery.Advertise(serviceProfile2);
+
             mdns.Start();
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace ArmaWebRequestTests.Controllers
 {
@@ -51,6 +52,28 @@ namespace ArmaWebRequestTests.Controllers
         public async Task<IActionResult> Get404()
         {
             return NotFound();
+        }
+
+        [HttpGet]
+        [HttpPost]
+        [Route("CheckHeaders")]
+        public async Task<IActionResult> CheckHeaders()
+        {
+            if (Request.Headers.ContainsKey("Via"))
+                return BadRequest("Via header should not be present");
+            if (!Request.Headers.ContainsKey("CustomHeader"))
+                return BadRequest("CustomHeader is missing");
+
+            if (Request.Method == "POST")
+            {
+                using var reader = new StreamReader(Request.Body, Encoding.UTF8);
+                string rawBody = await reader.ReadToEndAsync();
+
+                if (rawBody != "Hello World")
+                    return BadRequest("Invalid body content");
+            }
+
+            return Ok();
         }
 
     }

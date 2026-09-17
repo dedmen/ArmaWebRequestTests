@@ -3,8 +3,12 @@
 private _handle = webRequest #{
   "type": "http",
   "origin": "test",
-  "url": "https://myip.wtf/text",
-  "debug": true
+  "url": "https://localhost:7082/TestCase/CheckHeaders",
+  "debug": true,
+  "headers": #{
+    "Via": "test", // Not allowed
+    "CustomHeader": "yes" // Should go through
+  }
 };
 
 private _result = waitUntil _handle;

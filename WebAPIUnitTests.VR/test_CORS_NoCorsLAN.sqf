@@ -2,7 +2,8 @@
 
 private _handle = webRequest #{
   "type": "http",
-  "url": "http://10.0.0.3/" // OPTIONS returns 405
+  "url": "http://10.0.0.3/", // OPTIONS returns 405
+  "debug": true
 };
 
 private _result = waitUntil _handle;

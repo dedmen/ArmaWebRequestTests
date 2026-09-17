@@ -2,7 +2,8 @@
 
 private _handle = webRequest #{
   "type": "http",
-  "url": "https://localhost:7082/CORSTest/ArmaCors" // allows arma://test, but not arma://null
+  "url": "https://localhost:7082/CORSTest/ArmaCors", // allows arma://test, but not arma://null
+  "debug": true
 };
 
 private _result = waitUntil _handle;

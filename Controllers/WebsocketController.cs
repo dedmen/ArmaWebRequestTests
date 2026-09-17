@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
@@ -100,6 +101,7 @@ namespace ArmaWebRequestTests.Controllers
 
                 if (result.MessageType == WebSocketMessageType.Close)
                 {
+                    Console.WriteLine($"Closed {result.CloseStatus}: {result.CloseStatusDescription}");
                     break;
                 }
                 else if (result.MessageType == WebSocketMessageType.Text)
@@ -180,8 +182,30 @@ namespace ArmaWebRequestTests.Controllers
 
         #endregion Relay
 
+        #region Bye
+        [EnableCors("AllowWildcard")]
+        [AcceptVerbs("GET", "CONNECT")] // HTTP/1.1 and HTTP/2
+        [Route("bye")]
+        public async Task GetBye()
+        {
+            if (HttpContext.WebSockets.IsWebSocketRequest)
+            {
+                // Upgrade the HTTP connection to a WebSocket connection
+                using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
 
+                // Handle the continuous communication loop
+                await Task.Delay(500);
 
+                await webSocket.CloseAsync(WebSocketCloseStatus.PolicyViolation, "Close description", CancellationToken.None);
+            }
+            else
+            {
+                // Return 400 Bad Request if a regular HTTP client calls this endpoint
+                HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            }
+        }
+
+        #endregion Bye
 
 
 
