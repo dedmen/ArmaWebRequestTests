@@ -38,6 +38,10 @@ namespace ArmaWebRequestTests
                         {
                             addresses.Add(addr.Address);
                         }
+                        if (addr.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+                        {
+                            addresses.Add(addr.Address);
+                        }
                     }
                 }
             }

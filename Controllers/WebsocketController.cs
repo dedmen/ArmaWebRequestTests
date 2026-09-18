@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
+using Microsoft.AspNetCore.WebSockets;
 
 namespace ArmaWebRequestTests.Controllers
 {
@@ -190,8 +191,10 @@ namespace ArmaWebRequestTests.Controllers
         {
             if (HttpContext.WebSockets.IsWebSocketRequest)
             {
+                HttpContext.Response.Headers.Add("WeboscketAcceptExtraHeader", "This is a test of adding extra headers to a websocket connection establish");
+
                 // Upgrade the HTTP connection to a WebSocket connection
-                using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+                using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync(new WebSocketAcceptContext(){});
 
                 // Handle the continuous communication loop
                 await Task.Delay(500);

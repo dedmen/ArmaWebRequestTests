@@ -1,4 +1,7 @@
 
+using System.Net;
+using Microsoft.AspNetCore.ResponseCompression;
+
 namespace ArmaWebRequestTests
 {
     public class Program
@@ -21,6 +24,14 @@ namespace ArmaWebRequestTests
 
             });
 
+
+            // Add the Zstandard compression provider
+            builder.Services.AddResponseCompression(options =>
+            {
+                options.Providers.Add<BrotliCompressionProvider>();
+                options.Providers.Add<GzipCompressionProvider>();
+                options.EnableForHttps = true;
+            });
 
             // Add services to the container.
 
@@ -88,6 +99,8 @@ namespace ArmaWebRequestTests
             var app = builder.Build();
 
             app.UseHttpLogging();
+
+            app.UseResponseCompression();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

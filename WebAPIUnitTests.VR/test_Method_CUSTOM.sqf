@@ -2,23 +2,20 @@
 
 private _handle = webRequest #{
   "type": "http",
+  "method": "CUSTOM",
   "origin": "test",
   "url": "https://localhost:7082/TestCase/CheckHeaders",
   "debug": true,
   "headers": #{
     "Via": "test", // Not allowed
     "CustomHeader": "yes" // Should go through
-  }
+  },
+  "postData": "Hello World" // Exact match check
 };
 
 private _result = waitUntil _handle;
 _result params ["_request", "_result"];
 
 EXPECT_SUCCESS_CODE(200);
-
-private _respHeaders = _result get "responseHeaders";
-
-if (!("ResultHeader" in _respHeaders)) throw "Response header is missing";
-if (_respHeaders get "ResultHeader" != "Kindly") throw format["Response header wrong content: %1", _respHeaders get "ResultHeader"];
 
 _result

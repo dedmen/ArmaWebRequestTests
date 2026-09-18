@@ -1,9 +1,32 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using System.Text;
 
 namespace ArmaWebRequestTests.Controllers
 {
+
+    public class HttpCustomAttribute : HttpMethodAttribute
+    {
+        private static readonly IEnumerable<string> _supportedMethods = new[] { "CUSTOM" };
+
+        public HttpCustomAttribute()
+            : base(_supportedMethods)
+        {
+        }
+
+        public HttpCustomAttribute(string template)
+            : base(_supportedMethods, template)
+        {
+            if (template == null)
+            {
+                throw new ArgumentNullException(nameof(template));
+            }
+        }
+    }
+
+
+
     [ApiController]
     [Route("[controller]")]
     [EnableCors("AllowWildcard")]
@@ -56,6 +79,7 @@ namespace ArmaWebRequestTests.Controllers
 
         [HttpGet]
         [HttpPost]
+        [HttpCustom]
         [Route("CheckHeaders")]
         public async Task<IActionResult> CheckHeaders()
         {
@@ -64,7 +88,7 @@ namespace ArmaWebRequestTests.Controllers
             if (!Request.Headers.ContainsKey("CustomHeader"))
                 return BadRequest("CustomHeader is missing");
 
-            if (Request.Method == "POST")
+            if (Request.Method == "POST" || Request.Method == "CUSTOM")
             {
                 using var reader = new StreamReader(Request.Body, Encoding.UTF8);
                 string rawBody = await reader.ReadToEndAsync();
@@ -72,6 +96,8 @@ namespace ArmaWebRequestTests.Controllers
                 if (rawBody != "Hello World")
                     return BadRequest("Invalid body content");
             }
+
+            Response.Headers.Add("ResultHeader", "Kindly");
 
             return Ok();
         }
